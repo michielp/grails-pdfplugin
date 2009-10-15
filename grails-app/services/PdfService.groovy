@@ -30,11 +30,11 @@ class PdfService {
   The baseUri is included to allow for relative URL's in the XHTML string
 */
 
-  byte[] buildPdfFromString(content, baseUri) {
+  byte[] buildPdfFromString(content) {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     ITextRenderer renderer = new ITextRenderer();
     try {
-      renderer.setDocumentFromString(content, baseUri);
+      renderer.setDocumentFromString(content);
       renderer.layout();
       renderer.createPDF(baos);
       byte[] b = baos.toByteArray();

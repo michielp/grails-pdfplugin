@@ -8,7 +8,7 @@ class PdfController {
     try{
       byte[] b
       def baseUri = request.scheme + "://" + request.serverName + ":" + request.serverPort + grailsAttributes.getApplicationUri(request)
-      if(params.method == "post") {
+      if(params.pdfController || params.template) {
         def content
         if(params.template){
           println "Template: $params.template"
@@ -16,9 +16,13 @@ class PdfController {
         }
         else{
           println "GSP - Controller: $params.pdfController , Action: $params.pdfAction"
-          content = g.include(controller:params.pdfController, action:params.pdfAction, params:params)
+          def controllerName = params.pdfController.substring(0,1).toUpperCase() + params.pdfController.substring(1) + "Controller"
+          def controller = grailsApplication.mainContext.getBean(controllerName)
+          def model = controller[params.pdfAction].call()
+          def template = "/${params.pdfController}/${params.pdfAction}"
+          content = g.render(template:template, model:model)
         }
-        b = pdfService.buildPdfFromString(content, baseUri)
+        b = pdfService.buildPdfFromString(content)
       }
       else{
         def url = baseUri + params.url
@@ -53,7 +57,7 @@ class PdfController {
         }
         else{
           //println "GSP - Controller: $params.pdfController , Action: $params.pdfAction"
-          content = g.include(controller:params.pdfController, action:params.pdfAction, id:params.id, params:params)
+          // content = g.include(controller:params.pdfController, action:params.pdfAction, id:params.id, params:params)
         }
         b = pdfService.buildPdfFromString(content, baseUri)
       }

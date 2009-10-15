@@ -32,7 +32,7 @@ class PdfTagLib {
     }
     if(controller){
       link = new ApplicationTagLib().createLink(url: [controller: 'pdf', action:'pdfLink',
-             params: [pdfAction: "${action}", pdfController: "${controller}", pdfId: "${id}"filename: "${filename}"] ] )
+             params: [pdfAction: "${action}", pdfController: "${controller}", pdfId: "${id}", filename: "${filename}"] ] )
     }
     out << """
       <a href="${link}" class="${c}" title="pdf">
